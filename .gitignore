@@ -1,0 +1,6 @@
+# specific files
+local_settings.py
+*.pyc
+*.swp
+JSON
+.scrapy
