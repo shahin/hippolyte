@@ -91,8 +91,6 @@ class AmznSpider(CrawlSpider):
 
     def parse_reviews(self, response):
 
-        log.msg("THIS IS FROM THE LOG",level=log.DEBUG)
-
         hxs = HtmlXPathSelector(response)
         parsed_reviews = []
 

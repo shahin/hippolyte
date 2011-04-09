@@ -23,4 +23,4 @@ class AmznMediaTypeMiddleware(object):
         if media_type in self.allowed_types:
             return response
         else:
-            raise IgnoreRequest(msg="Media type ("+media_type+") not allowed.")
+            raise IgnoreRequest("Media type ("+media_type+") not allowed.")
