@@ -17,10 +17,13 @@ class AmznMediaTypeMiddleware(object):
     def process_response(self, request, response, spider):
 
         hxs = HtmlXPathSelector(response)
-        media_type = hxs.select("//a[@class='navCatA']/text()").extract()[0]
-        request.meta['MediaType'] = media_type
+        try:
+            media_type = hxs.select("//a[@class='navCatA']/text()").extract()[0]
+            request.meta['MediaType'] = media_type[0]
 
-        if media_type in self.allowed_types:
-            return response
-        else:
-            raise IgnoreRequest("Media type ("+media_type+") not allowed.")
+            if media_type[0] in self.allowed_types:
+                return response
+            else:
+                raise IgnoreRequest("Media type ("+media_type[0]+") not allowed.")
+        except IndexError:
+            raise IgnoreRequest("Media type not found.")
