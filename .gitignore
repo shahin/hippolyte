@@ -1,6 +1,9 @@
 # specific files
 local_settings.py
+setup.py
 *.pyc
 *.swp
 JSON
+build
 .scrapy
+project.egg-info
