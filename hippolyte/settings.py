@@ -18,13 +18,12 @@ NEWSPIDER_MODULE = 'hippolyte.spiders'
 DEFAULT_ITEM_CLASS = 'hippolyte.items.AmznReviewItem'
 USER_AGENT = '%s/%s' % (BOT_NAME, BOT_VERSION)
 
-ITEM_PIPELINES = ['hippolyte.pipelines.AmznPipeline']
-JSON_PATH = '/Users/shahin/Programming/hippolyte/JSON'
+ITEM_PIPELINES = ['hippolyte.pipelines.AmznCsvPipeline']
 
-LOG_LEVEL = 'DEBUG'
+LOG_LEVEL = 'INFO'
 
 AMZN_DEPTH_STATS = 1
-AMZN_DEPTH_LIMIT = 2
+AMZN_DEPTH_LIMIT = 1
 SPIDER_MIDDLEWARES = {
     "hippolyte.spidermiddlewares.AmznDepthMiddleware" : 950,
 }

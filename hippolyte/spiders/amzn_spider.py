@@ -1,5 +1,6 @@
 from math import ceil
 import urllib2
+from datetime import datetime
 
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.contrib.linkextractors.sgml import SgmlLinkExtractor
@@ -15,7 +16,7 @@ class AmznSpider(CrawlSpider):
     name = "amazon.com"
     allowed_domains = ["amazon.com"]
 
-    start_urls = []
+    start_urls = ['http://www.amazon.com/product-reviews/0375423729/ref=dp_top_cm_cr_acr_txt']
 
     rules = (
         # Extract the link to the next review page for this product
@@ -74,7 +75,7 @@ class AmznSpider(CrawlSpider):
         customer_id = response.url.split('/')[6]
 
         log.msg("CustomerId: "+customer_id+", Num reviews: "+str(num_reviews) \
-                + ", Num pages: "+str(num_review_pages),level=log.INFO)
+                + ", Num pages: "+str(num_review_pages),level=log.DEBUG)
 
         amzn_customer = AmznCustomerItem()
         amzn_customer['CustomerId'] = customer_id
@@ -112,7 +113,7 @@ class AmznSpider(CrawlSpider):
         if ASIN.find('-') > 0:
             ASIN = response.url.split('/')[5] 
 
-        log.msg("Response uses more tables: " + str(_response_uses_more_tables),level=log.ERROR)
+        log.msg("Response uses more tables: " + str(_response_uses_more_tables),level=log.DEBUG)
 
         # in each review <td>
         for review in reviews:
@@ -149,6 +150,17 @@ class AmznSpider(CrawlSpider):
             parsed_review['Date'] = review.select('div/span/nobr/text()').extract()[0]
             parsed_review['Summary'] = review.select('div/span/b/text()').extract()[0]
 
+            # reformat the date into a datestamp
+            try:
+                parsed_review['Date'] = datetime.strptime(parsed_review['Date'],'%B %d, %Y').strftime('%Y-%m-%d')
+            except ValueError:
+                parsed_review['Date'] = ''
+
+            # reformat the date retrieved into a timestamp
+            try:
+                parsed_review['DateRetrieved'] = datetime.strptime(parsed_review['DateRetrieved'],'%a, %d %b %Y %H:%M:%S GMT').strftime('%Y-%m-%dT%H:%M:%S')
+            except ValueError:
+                parsed_review['DateRetrieved'] = ''
 
             parsed_reviews.append(parsed_review)
 
