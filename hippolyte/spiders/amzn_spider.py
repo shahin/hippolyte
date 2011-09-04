@@ -20,7 +20,7 @@ class AmznSpider(CrawlSpider):
     rules = (
         # Extract the link to the next review page for this product
         # e.g. "http://www.amazon.com/Ride-Bob-Asleep-at-Wheel/product-reviews/B00000JWOJ/ref=cm_cr_pr_link_next_2?ie=UTF8&showViewpoints=0&pageNumber=2"
-        Rule(SgmlLinkExtractor(allow=('ref=cm_cr_pr_link_next_')),callback='parse_reviews',follow=True),
+        Rule(SgmlLinkExtractor(allow=('ref=cm_cr_pr_top_link_next_')),callback='parse_reviews',follow=True),
 
         # Extract the link to the customer that wrote this item review
         Rule(CustomerLinkExtractor(allow=('ref=cm_cr_pr_auth_rev'),ignore_set=set()),callback='parse_first_customer_page',follow=True),
