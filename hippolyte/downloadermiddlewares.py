@@ -18,12 +18,12 @@ class AmznMediaTypeMiddleware(object):
 
         hxs = HtmlXPathSelector(response)
         try:
-            media_type = hxs.select("//a[@class='navCatA']/text()").extract()[0]
-            request.meta['MediaType'] = media_type
+            media_type = hxs.select("//ul[@id='nav-subnav']/li[@class='nav-subnav-item nav-category-button']/a/text()").extract()[0]
+            request.meta['MediaType'] = media_type.strip()
 
-            if media_type in self.allowed_types:
+            if request.meta['MediaType'] in self.allowed_types:
                 return response
             else:
-                raise IgnoreRequest("Media type ("+media_type+") not allowed.")
+                raise IgnoreRequest("Media type ("+request.meta['MediaType']+") not allowed.")
         except IndexError:
             raise IgnoreRequest("Media type not found.")
